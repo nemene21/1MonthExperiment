@@ -1,5 +1,7 @@
 
 function gameReload()
+
+    player = newPlayer(400, 300)
     
 end
 
@@ -14,6 +16,9 @@ function game()
     
     setColor(255, 255, 255)
     clear(155, 155, 155)
+
+    player:process()
+    player:draw()
 
     -- Return scene
     return sceneAt
