@@ -1,5 +1,5 @@
 
-SPRSCL = 1
+SPRSCL = 3
 
 -- Spritesheets
 

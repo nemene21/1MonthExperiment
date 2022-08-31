@@ -3,7 +3,8 @@
 SHADERS = {
     POST_PROCESS = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/POST_PROCESS.fs"))),
     FLASH = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/FLASH.fs"))),
-    EMPTY = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/EMPTY.fs")))
+    EMPTY = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/EMPTY.fs"))),
+    GRAYSCALE = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/GRAYSCALE.fs")))
 }
 
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))

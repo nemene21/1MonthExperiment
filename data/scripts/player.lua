@@ -2,6 +2,8 @@
 GRAVITY        = 800
 MAX_FALL_SPEED = 1200
 
+PLAYER_IMAGE   = love.graphics.newImage("data/graphics/images/golfBall.png")
+
 function newPlayer(x, y)
 
     return {
@@ -107,14 +109,14 @@ end
 
 function drawPlayer(this)
 
-    setColor(255, 255 * this.floatTimer / 5, 255 * this.floatTimer / 5)
-
     if this.holding then
 
         love.graphics.line(xM, yM, this.holdPos.x, this.holdPos.y)
 
     end
 
-    love.graphics.circle("fill", this.pos.x - camera[1], this.pos.y - camera[2], 36)
+    love.graphics.setShader(SHADERS.GRAYSCALE); SHADERS.GRAYSCALE:send("intensity", 1 - this.floatTimer / 5)
+    drawSprite(PLAYER_IMAGE, this.pos.x, this.pos.y)
+    love.graphics.setShader()
 
 end
