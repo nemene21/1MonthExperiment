@@ -9,7 +9,7 @@ function love.load()
 
     fullscreen = false; title = "Ne_mene´s Framework"
 
-    WS = {800,600}; wFlags = {resizable=true}
+    WS = {768,576}; wFlags = {resizable=true}
     aspectRatio = {WS[1]/WS[2],WS[2]/WS[1]}
     love.graphics.setBackgroundColor(0,0,0,1); love.window.setMode(WS[1],WS[2],wFlags); display = love.graphics.newCanvas(WS[1],WS[2]); displayScale = 1
     postProCanvas = love.graphics.newCanvas(WS[1],WS[2])

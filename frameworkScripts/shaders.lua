@@ -4,7 +4,8 @@ SHADERS = {
     POST_PROCESS = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/POST_PROCESS.fs"))),
     FLASH = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/FLASH.fs"))),
     EMPTY = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/EMPTY.fs"))),
-    GRAYSCALE = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/GRAYSCALE.fs")))
+    PLAYER = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/PLAYER.fs"))),
+    SHADOW = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/SHADOW.fs")))
 }
 
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
@@ -96,7 +97,7 @@ function resetShader() love.graphics.setShader() end
 SHOCKWAVES = {}
 
 function processShockwaves()
-
+    
     local kill = {}
 
     for id, shockwave in ipairs(SHOCKWAVES) do

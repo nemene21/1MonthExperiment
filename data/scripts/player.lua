@@ -2,14 +2,17 @@
 GRAVITY        = 800
 MAX_FALL_SPEED = 1200
 
-PLAYER_IMAGE   = love.graphics.newImage("data/graphics/images/golfBall.png")
+PLAYER_IMAGE   = love.graphics.newImage("data/graphics/images/ball.png")
+PLAYER_BULLET  = loadJson("data/graphics/particles/playerBullet.json")
 
 function newPlayer(x, y)
 
-    return {
+    local player = {
 
         pos = newVec(x, y),
         vel = newVec(0, 0),
+
+        velocityParticles = newParticleSystem(x, y, loadJson("data/graphics/particles/playerTrail.json")),
 
         knockback = newVec(0, 0),
 
@@ -19,16 +22,35 @@ function newPlayer(x, y)
         holdPos = nil,
         holding = false,
 
-        floatTimer = 5,
+        floatTimer = 3,
         isFloating = false,
+
+        bullets    = {},
+        shootTimer = 0,
 
         stats = {
 
-            flingStrenght = 3
+            flingStrenght = 4,
+            maxBullets = 8,
+            spread = 5,
+            knockbackResistance = 0.5
 
         }
         
     }
+
+    local rot = 360 / player.stats.maxBullets
+
+    for i=1, player.stats.maxBullets do
+
+        local pos = newVec(40, 0)
+        pos:rotate(rot * i)
+
+        table.insert(player.bullets, newParticleSystem(pos.x + player.pos.x, pos.y + player.pos.y, deepcopyTable(PLAYER_BULLET)))
+
+    end
+
+    return player
 end
 
 function processPlayer(this)
@@ -37,12 +59,29 @@ function processPlayer(this)
     this.vel.y = math.min(this.vel.y + dt * GRAVITY * boolToInt(not this.isFloating), MAX_FALL_SPEED)
 
     -- Air friction
-    this.vel.x = lerp(this.vel.x, 0, dt)
+    this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
 
     this.pos.x = this.pos.x + this.vel.x * dt -- Apply velocity and knockback
     this.pos.y = this.pos.y + this.vel.y * dt
     this.pos.x = this.pos.x + this.knockback.x * dt
     this.pos.y = this.pos.y + this.knockback.y * dt
+
+    this.knockback.x = lerp(this.knockback.x, 0, dt * 6)
+    this.knockback.y = lerp(this.knockback.y, 0, dt * 6)
+
+    local rot = 360 / player.stats.maxBullets
+    for id, bullet in ipairs(this.bullets) do -- Put bullets in their place
+
+        local pos = newVec(40, 0)
+        pos:rotate(rot * id)
+
+        bullet.x = pos.x + this.pos.x
+        bullet.y = pos.y + this.pos.y
+
+    end
+
+    this.velocityParticles.x = this.pos.x -- Set particle position
+    this.velocityParticles.y = this.pos.y
 
     this.pos.y = clamp(this.pos.y, 0, 600)
 
@@ -65,7 +104,7 @@ function processPlayer(this)
     this.isFloating = false
     if pressed("space") then -- Try floating
 
-        this.floatTimer = clamp(this.floatTimer - dt, 0, 5)
+        this.floatTimer = clamp(this.floatTimer - dt, 0, 3)
 
         if this.floatTimer ~= 0 then
 
@@ -75,7 +114,7 @@ function processPlayer(this)
 
     else
 
-        this.floatTimer = clamp(this.floatTimer + dt, 0, 5)
+        this.floatTimer = clamp(this.floatTimer + dt, 0, 3)
 
     end
 
@@ -103,6 +142,30 @@ function processPlayer(this)
 
         this.holding = false
 
+        shock(this.pos.x, this.pos.y, 0.1, 0.05, 0.2)
+
+    end
+
+    this.shootTimer = this.shootTimer - dt
+    if this.shootTimer < 0 and mousePressed(2) and #this.bullets ~= 0 then -- Shoot
+
+        this.shootTimer = 0.2
+
+        local bullet = this.bullets[#this.bullets]
+
+        local bulletVel = newVec(xM - bullet.x, yM - bullet.y)
+        bulletVel:normalize()
+        bulletVel:rotate(love.math.random(this.stats.spread * - 0.5, this.stats.spread * 0.5))
+
+        bullet.vel = newVec(bulletVel.x * 800, bulletVel.y * 800)
+
+        table.remove(this.bullets, #this.bullets)
+
+        table.insert(playerBullets, bullet)
+
+        this.knockback.x = this.knockback.x - bulletVel.x * this.stats.knockbackResistance
+        this.knockback.y = this.knockback.y - bulletVel.y * this.stats.knockbackResistance
+
     end
 
 end
@@ -115,8 +178,27 @@ function drawPlayer(this)
 
     end
 
-    love.graphics.setShader(SHADERS.GRAYSCALE); SHADERS.GRAYSCALE:send("intensity", 1 - this.floatTimer / 5)
-    drawSprite(PLAYER_IMAGE, this.pos.x, this.pos.y)
+    for id, bullet in ipairs(this.bullets) do
+
+        bullet:process()
+
+    end
+
+    love.graphics.setShader(SHADERS.PLAYER); SHADERS.PLAYER:send("intensity", 1 - this.floatTimer / 3)
+
+    local particleStrength = this.vel:getLen() / 1000
+    this.velocityParticles.rotation = this.vel:getRot()
+    this.velocityParticles.particleData.width.a = particleStrength * 12
+    this.velocityParticles.particleData.width.b = particleStrength * 24
+
+    this.velocityParticles:process()
+    setColor(255, 255, 255)
+
+    local stretch = this.vel:getLen() / 5000
+
+    local angle = this.vel:getRot() / 180 * 3.14
+    drawSprite(PLAYER_IMAGE, this.pos.x, this.pos.y, 1 + stretch, 1 - stretch, angle)
+
     love.graphics.setShader()
 
 end

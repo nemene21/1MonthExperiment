@@ -19,10 +19,7 @@ function drawParticleCircleGlow(P,w)
     love.graphics.setColor(P.color.r,P.color.g,P.color.b,P.color.a)
     love.graphics.circle("fill",P.x - camera[1],P.y - camera[2], w)
 
-    love.graphics.setBlendMode("add")
-    love.graphics.setColor(P.color.r,P.color.g,P.color.b,P.color.a)
-    love.graphics.circle("fill",P.x - camera[1],P.y - camera[2], w * 1.2)
-    love.graphics.setBlendMode("alpha")
+    shine(P.x, P.y, w * 5, {P.color.r * 255,P.color.g * 255,P.color.b * 255,P.color.a * 255})
 
 end
 
