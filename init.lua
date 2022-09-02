@@ -18,7 +18,9 @@ require "frameworkScripts.audio"
 
 -- Project Specific Modules
 require "data.scripts.player"
+
 require "data.scripts.rooms"
+require "data.scripts.generation"
 
 -- Scenes
 require "data.scripts.scenes.blank"; require "data.scripts.scenes.game"; require "data.scripts.scenes.intro"

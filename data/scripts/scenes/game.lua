@@ -3,7 +3,7 @@ function gameReload()
 
     player = newPlayer(400, 300)
 
-    rooms = {newRoom(0)}
+    rooms = generate()
 
     BACKGROUND = love.graphics.newCanvas(WS[1], WS[2])
     FOREGROUND = love.graphics.newCanvas(WS[1], WS[2])
@@ -43,6 +43,8 @@ function game()
 
     player:process()
     player:draw()
+
+    for id, room in ipairs(rooms) do room:drawFg() end
 
     love.graphics.setCanvas(display)
 

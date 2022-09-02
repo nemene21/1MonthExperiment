@@ -179,6 +179,12 @@ function processPlayer(this)
 
     end
 
+    if player.pos.y > camera[2] then
+
+        bindCamera(WS[1] * 0.5, player.pos.y)
+
+    end
+
 end
 
 function drawPlayer(this)

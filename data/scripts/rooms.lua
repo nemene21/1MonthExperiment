@@ -7,7 +7,8 @@ function newRoom(y, layout)
 
         y = y,
 
-        drawBg = drawRoomBg
+        drawBg = drawRoomBg,
+        drawFg = drawRoomFg
 
     }
 
@@ -19,14 +20,14 @@ function newRoom(y, layout)
 
             local tileToPlace = math.floor(math.abs(love.math.noise(Tx * 0.1, Ty * 0.1)) * 3)
 
-            room.bgTilemap:setTile(Tx, Ty, {1 + tileToPlace, 1})
+            room.bgTilemap:setTile(Tx, Ty + y / WS[2] * 12, {1 + tileToPlace, 1})
 
         end
 
     end
 
     room.tilemap = newTilemap(ROOM_TILESET, 48, layout) -- Foreground
-    room.tilemap.buildColliders()
+    room.tilemap:buildColliders()
 
     return room
 
@@ -35,5 +36,11 @@ end
 function drawRoomBg(this)
 
     this.bgTilemap:draw()
+
+end
+
+function drawRoomFg(this)
+
+    this.tilemap:draw()
 
 end
