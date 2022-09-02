@@ -67,7 +67,7 @@ function love.draw()
     love.graphics.clear(0,0,0,1)
 
     --------------------------------------------------------------------------SCENE CALLED
-    processCamera()
+    processCamera(); processShockwaves()
 
     love.graphics.setShader()
 
@@ -81,7 +81,7 @@ function love.draw()
         transition = 1
     end
 
-    processAllLights(); processShockwaves()
+    processAllLights()
 
     -- Mouse
     -- love.graphics.setColor(1,1,1,1)
