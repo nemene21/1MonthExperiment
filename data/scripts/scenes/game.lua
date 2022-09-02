@@ -44,6 +44,9 @@ function game()
     player:process()
     player:draw()
 
+    roomAt = math.floor(player.pos.y / WS[2])
+    bindCamera(WS[1] * 0.5, roomAt * WS[2] + WS[2] * 0.5, 1)
+
     for id, room in ipairs(rooms) do room:drawFg() end
 
     love.graphics.setCanvas(display)

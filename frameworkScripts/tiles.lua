@@ -13,7 +13,7 @@ function drawTilemap(tilemap)
         local pos = splitString(id,",")
         local tileX = tonumber(pos[1]); local tileY = tonumber(pos[2])
         
-        drawFrame(tilemap.sheet,T[1],T[2],tileX*tilemap.tileSize,tileY*tilemap.tileSize)
+        drawFrame(tilemap.sheet,T[1],T[2],tileX*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.x,tileY*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.y)
     end
 
 end
@@ -37,7 +37,7 @@ function buildTilemapColliders(tilemap)
 end
 
 -- New tilemap
-function newTilemap(texture,tileSize,tiles)
+function newTilemap(texture,tileSize,tiles, offset)
     local tilemap = {
         tiles=tiles or {},
         tileSize=tileSize,
@@ -47,6 +47,8 @@ function newTilemap(texture,tileSize,tiles)
         setTile=setTilemapTile,
         removeTile=removeTilemapTile,
         draw=drawTilemap,
+
+        offset = offset or newVec(0, 0),
 
         colliders={},
         buildColliders=buildTilemapColliders

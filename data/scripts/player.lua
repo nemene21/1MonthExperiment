@@ -9,7 +9,7 @@ function newPlayer(x, y)
 
     local player = {
 
-        pos = newVec(x, y),
+        pos = newRect(x, y, 40, 40),
         vel = newVec(0, 0),
 
         velocityParticles = newParticleSystem(x, y, loadJson("data/graphics/particles/playerTrail.json")),
@@ -62,10 +62,7 @@ function processPlayer(this)
     -- Air friction
     this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
 
-    this.pos.x = this.pos.x + this.vel.x * dt -- Apply velocity and knockback
-    this.pos.y = this.pos.y + this.vel.y * dt
-    this.pos.x = this.pos.x + this.knockback.x * dt
-    this.pos.y = this.pos.y + this.knockback.y * dt
+    this.pos = moveRect(this.pos, newVec(this.vel.x + this.knockback.x, this.vel.y + this.knockback.y), rooms[roomAt + 1].tilemap.colliders)
 
     this.knockback.x = lerp(this.knockback.x, 0, dt * 2)
     this.knockback.y = lerp(this.knockback.y, 0, dt * 2)
@@ -84,9 +81,7 @@ function processPlayer(this)
     this.velocityParticles.x = this.pos.x -- Set particle position
     this.velocityParticles.y = this.pos.y
 
-    this.pos.y = clamp(this.pos.y, 0, 600)
-
-    if player.pos.x < 18 then -- Hitting left edge
+    if player.pos.touching.x ~= 0 then -- Hitting on x
 
         this.pos.x = this.pos.x - this.vel.x * dt -- Apply opposite velocity
 
@@ -94,11 +89,11 @@ function processPlayer(this)
 
     end
 
-    if player.pos.x > 782 then -- Hitting right edge
+    if player.pos.touching.y ~= 0 then -- Hitting on y
 
-        this.pos.x = this.pos.x - this.vel.x * dt -- Apply opposite velocity
+        this.pos.y = this.pos.y - this.vel.y * dt -- Apply opposite velocity
 
-        player.vel.x = player.vel.x * - 0.8
+        player.vel.y = player.vel.y * - 0.8
 
     end
 
@@ -176,12 +171,6 @@ function processPlayer(this)
         this.vel.y = this.vel.y - bulletVel.y * 200
 
         shake(3, 1, 0.15, bulletVel:getRot() + 180)
-
-    end
-
-    if player.pos.y > camera[2] then
-
-        bindCamera(WS[1] * 0.5, player.pos.y)
 
     end
 

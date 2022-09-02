@@ -1,7 +1,7 @@
 
 camera = {0,0}; boundCamPos = {0,0}
 
-lerpSpeed = 3
+lerpSpeed = 6
 
 shakeStr = 0; shakes = 0; shakeTimer = newTimer(0); dir = nil; screenshake = {0,0}
 lastScreenshake = {0,0}; boundScreenshake = {0,0}
