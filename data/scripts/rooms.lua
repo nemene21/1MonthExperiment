@@ -1,8 +1,7 @@
 
-ROOM_PRESETS = 0
 ROOM_TILESET = newSpritesheet("data/graphics/images/tileset.png", 16, 16)
 
-function newRoom(y)
+function newRoom(y, layout)
 
     local room = {
 
@@ -12,9 +11,7 @@ function newRoom(y)
 
     }
 
-    local layout = love.math.random(1, ROOM_PRESETS + 1)
-
-    room.bgTilemap = newTilemap(ROOM_TILESET, 48)
+    room.bgTilemap = newTilemap(ROOM_TILESET, 48) -- Background
 
     for Tx=0, 16 do
 
@@ -27,6 +24,9 @@ function newRoom(y)
         end
 
     end
+
+    room.tilemap = newTilemap(ROOM_TILESET, 48, layout) -- Foreground
+    room.tilemap.buildColliders()
 
     return room
 
