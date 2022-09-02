@@ -130,7 +130,7 @@ end
 
 function shock(x, y, size, force, lifetime)
 
-    table.insert(SHOCKWAVES, {position = {x, y}, size = size, lifetime = lifetime, force = force, lifetimeMax = lifetime})
+    if #SHOCKWAVES < 16 then table.insert(SHOCKWAVES, {position = {x, y}, size = size, lifetime = lifetime, force = force, lifetimeMax = lifetime}) end
 
 end
 

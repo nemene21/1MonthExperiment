@@ -22,7 +22,7 @@ function newRoom(y)
 
             local tileToPlace = math.floor(math.abs(love.math.noise(Tx * 0.1, Ty * 0.1)) * 3)
 
-            room.bgTilemap:setTile(Tx, Ty, {2 + tileToPlace, 12})
+            room.bgTilemap:setTile(Tx, Ty, {1 + tileToPlace, 1})
 
         end
 

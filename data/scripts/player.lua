@@ -24,6 +24,7 @@ function newPlayer(x, y)
 
         floatTimer = 3,
         isFloating = false,
+        floatingAnimation = 0,
 
         bullets    = {},
         shootTimer = 0,
@@ -66,8 +67,8 @@ function processPlayer(this)
     this.pos.x = this.pos.x + this.knockback.x * dt
     this.pos.y = this.pos.y + this.knockback.y * dt
 
-    this.knockback.x = lerp(this.knockback.x, 0, dt * 6)
-    this.knockback.y = lerp(this.knockback.y, 0, dt * 6)
+    this.knockback.x = lerp(this.knockback.x, 0, dt * 2)
+    this.knockback.y = lerp(this.knockback.y, 0, dt * 2)
 
     local rot = 360 / player.stats.maxBullets
     for id, bullet in ipairs(this.bullets) do -- Put bullets in their place
@@ -123,6 +124,12 @@ function processPlayer(this)
         this.vel.x = lerp(this.vel.x, 0, dt * 8)
         this.vel.y = lerp(this.vel.y, 0, dt * 8)
 
+        this.floatingAnimation = lerp(this.floatingAnimation, 1, dt * 4)
+
+    else
+
+        this.floatingAnimation = lerp(this.floatingAnimation, 0, dt * 4)
+
     end
 
     if mouseJustPressed(1) then -- Hold
@@ -142,7 +149,9 @@ function processPlayer(this)
 
         this.holding = false
 
-        shock(this.pos.x, this.pos.y, 0.1, 0.05, 0.2)
+        shock(this.pos.x, this.pos.y, 0.5, 0.05, 0.2)
+
+        shake(20 * math.min(velToAdd:getLen() / 2000, 1), 1, 0.2, velToAdd:getRot())
 
     end
 
@@ -163,8 +172,10 @@ function processPlayer(this)
 
         table.insert(playerBullets, bullet)
 
-        this.knockback.x = this.knockback.x - bulletVel.x * this.stats.knockbackResistance
-        this.knockback.y = this.knockback.y - bulletVel.y * this.stats.knockbackResistance
+        this.vel.x = this.vel.x - bulletVel.x * 200
+        this.vel.y = this.vel.y - bulletVel.y * 200
+
+        shake(3, 1, 0.15, bulletVel:getRot() + 180)
 
     end
 
@@ -194,10 +205,20 @@ function drawPlayer(this)
     this.velocityParticles:process()
     setColor(255, 255, 255)
 
-    local stretch = this.vel:getLen() / 5000
+    local stretch = this.vel:getLen() / 3000
+
+    local floatAnimation = this.floatingAnimation * math.abs(math.sin(globalTimer * 10) * 0.2)
 
     local angle = this.vel:getRot() / 180 * 3.14
-    drawSprite(PLAYER_IMAGE, this.pos.x, this.pos.y, 1 + stretch, 1 - stretch, angle)
+
+    love.graphics.translate(this.pos.x - camera[1], this.pos.y - camera[2])
+    love.graphics.rotate(angle)
+    love.graphics.scale(1 + stretch, 1 - stretch)
+    love.graphics.rotate(-angle)
+
+    love.graphics.draw(PLAYER_IMAGE, 0, 0, 0, (1 + floatAnimation) * 3, (1 + floatAnimation) * 3, PLAYER_IMAGE:getWidth() * 0.5, PLAYER_IMAGE:getHeight() * 0.5)
+
+    love.graphics.origin()
 
     love.graphics.setShader()
 

@@ -25,7 +25,7 @@ function game()
     clear(155, 155, 155)
 
     love.graphics.setCanvas(BACKGROUND)
-    clear(0, 0, 0, 0)
+    clear(255, 157, 129)
 
     for id, room in ipairs(rooms) do room:drawBg() end
 
@@ -53,6 +53,8 @@ function game()
     love.graphics.setShader()
 
     love.graphics.draw(FOREGROUND)
+
+    shock(400, 300, 0.5, 0.1, 0.5)
 
     -- Return scene
     return sceneAt
