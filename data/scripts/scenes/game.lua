@@ -9,6 +9,8 @@ function gameReload()
     FOREGROUND = love.graphics.newCanvas(WS[1], WS[2])
 
     playerBullets = {}
+
+    ROOM_IN = rooms[1]
     
 end
 
@@ -44,10 +46,15 @@ function game()
     player:process()
     player:draw()
 
-    roomAt = math.floor(player.pos.y / WS[2])
-    bindCamera(WS[1] * 0.5, roomAt * WS[2] + WS[2] * 0.5, 1)
+    roomAt = math.floor(- player.pos.y / WS[2] + 2)
+    ROOM_IN = rooms[roomAt]
+    bindCamera(WS[1] * 0.5, - ((roomAt - 2) * WS[2] + WS[2] * 0.5), 1)
 
     for id, room in ipairs(rooms) do room:drawFg() end
+
+    drawColliders(ROOM_IN.tilemap.colliders)
+    drawCollider(player.pos)
+    setColor(255, 255, 255)
 
     love.graphics.setCanvas(display)
 

@@ -83,7 +83,7 @@ end
 -- Draw cool debug rects
 function drawCollider(collider)
     setColor(0,0,255,50)
-    love.graphics.rectangle("fill",collider.x,collider.y,collider.w,collider.h)
+    love.graphics.rectangle("fill",collider.x - camera[1] - collider.w * 0.5, collider.y - camera[2] - collider.h * 0.5 ,collider.w,collider.h)
     setColor(0,0,255,255)
 end
 

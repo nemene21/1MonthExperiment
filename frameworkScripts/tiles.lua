@@ -15,7 +15,7 @@ function drawTilemap(tilemap)
 
         local pos = newVec(tileX*tilemap.tileSize - tilemap.offset.x, tileY*tilemap.tileSize- tilemap.offset.y)
 
-        if pos.x >= -24 and pos.x <= 824 and pos.y >= -24 and pos.y <= 624 then
+        if pos.x - camera[1] >= -48 and pos.x - camera[1] <= 848 and pos.y - camera[2] >= -48 and pos.y - camera[2] <= 648 then
         
             drawFrame(tilemap.sheet,T[1],T[2],pos.x, pos.y)
 
@@ -36,7 +36,7 @@ function buildTilemapColliders(tilemap)
                 tilemap.tiles[tostring(tileX)..","..tostring(tileY - 1)] == nil or tilemap.tiles[tostring(tileX)..","..tostring(tileY + 1)] == nil
 
         if place then
-            local rect = newRect(tileX * tilemap.tileSize + tilemap.tileSize * 0.5, tileY * tilemap.tileSize + tilemap.tileSize * 0.5, tilemap.tileSize, tilemap.tileSize)
+            local rect = newRect(tileX * tilemap.tileSize + tilemap.tileSize * 0.5 + tilemap.offset.x, tileY * tilemap.tileSize + tilemap.tileSize * 0.5 - tilemap.offset.y, tilemap.tileSize, tilemap.tileSize)
             table.insert(tilemap.colliders,rect)
         end
     end
@@ -54,7 +54,7 @@ function newTilemap(texture,tileSize,tiles, offset)
         removeTile=removeTilemapTile,
         draw=drawTilemap,
 
-        offset = offset or newVec(0, 0),
+        offset = offset,
 
         colliders={},
         buildColliders=buildTilemapColliders

@@ -16,7 +16,7 @@ function newRoom(y, layout)
 
     for Tx=0, 16 do
 
-        for Ty=0, 12 do
+        for Ty=0, 11 do
 
             local tileToPlace = math.floor(math.abs(love.math.noise(Tx * 0.1, (Ty + y / WS[2] * 12) * 0.1)) * 3)
 
