@@ -1,5 +1,5 @@
 
-ROOM_LAYOUTS = 1
+ROOM_LAYOUTS = 2
 
 function generate()
 

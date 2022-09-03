@@ -59,6 +59,8 @@ function processPlayer(this)
     -- Air friction
     this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
 
+    print(roomAt + 1)
+
     this.pos = moveRect(this.pos, newVec(this.vel.x + this.knockback.x, this.vel.y + this.knockback.y), rooms[roomAt + 1].tilemap.colliders)
 
     this.knockback.x = lerp(this.knockback.x, 0, dt * 2)

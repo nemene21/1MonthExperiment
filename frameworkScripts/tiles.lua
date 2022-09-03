@@ -13,7 +13,7 @@ function drawTilemap(tilemap)
         local pos = splitString(id,",")
         local tileX = tonumber(pos[1]); local tileY = tonumber(pos[2])
 
-        local pos = newVec(tileX*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.x, tileY*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.y)
+        local pos = newVec(tileX*tilemap.tileSize - tilemap.offset.x, tileY*tilemap.tileSize- tilemap.offset.y)
 
         if pos.x >= -24 and pos.x <= 824 and pos.y >= -24 and pos.y <= 624 then
         
@@ -36,7 +36,7 @@ function buildTilemapColliders(tilemap)
                 tilemap.tiles[tostring(tileX)..","..tostring(tileY - 1)] == nil or tilemap.tiles[tostring(tileX)..","..tostring(tileY + 1)] == nil
 
         if place then
-            local rect = newRect(tileX * tilemap.tileSize, tileY * tilemap.tileSize, tilemap.tileSize, tilemap.tileSize)
+            local rect = newRect(tileX * tilemap.tileSize + tilemap.tileSize * 0.5, tileY * tilemap.tileSize + tilemap.tileSize * 0.5, tilemap.tileSize, tilemap.tileSize)
             table.insert(tilemap.colliders,rect)
         end
     end

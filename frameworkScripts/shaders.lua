@@ -107,8 +107,6 @@ function processShockwaves()
 
         local idC = id - 1
 
-        print(shockwave.position[1] / WS[1], shockwave.position[2] / WS[2])
-
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].lifetime", shockwave.lifetime)
 
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].lifetimeMax", shockwave.lifetimeMax)
