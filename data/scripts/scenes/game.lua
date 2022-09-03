@@ -54,14 +54,12 @@ function game()
     love.graphics.draw(BACKGROUND)
 
     love.graphics.setShader(SHADERS.SHADOW)
-    --love.graphics.draw(FOREGROUND, -8, 8)
+    love.graphics.draw(FOREGROUND, -8, 8)
     love.graphics.setShader()
 
     love.window.setTitle(love.timer.getFPS())
 
     love.graphics.draw(FOREGROUND)
-
-    if justPressed("space") then shock(WS[1] * 0.5, WS[2] * 0.5, 0.5, 0.1, 2) end
 
     -- Return scene
     return sceneAt

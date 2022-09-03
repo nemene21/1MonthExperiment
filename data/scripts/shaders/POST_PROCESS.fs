@@ -3,7 +3,7 @@ uniform Image lightImage;
 
 uniform Image vignetteMask;
 
-uniform float xRatio;
+extern float xRatio;
 
 struct Shockwave {
 
@@ -18,11 +18,11 @@ struct Shockwave {
 
 };
 
-uniform int ACTIVE_SHOCKWAVES;
+extern int ACTIVE_SHOCKWAVES;
 
-uniform Shockwave shockwaves[16];
+extern Shockwave shockwaves[16];
 
-vec2 screenDimensions = vec2(800, 600);
+vec2 screenDimensions = vec2(768, 576);
 
 vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 {

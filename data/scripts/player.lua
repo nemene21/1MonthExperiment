@@ -150,7 +150,7 @@ function processPlayer(this)
 
         this.holding = false
 
-        shock(this.pos.x, this.pos.y, 0.5, 0.05, 0.2)
+        shock(this.pos.x, this.pos.y, 0.2 * math.min(velToAdd:getLen() / 500, 1), 0.05 * math.min(velToAdd:getLen() / 500, 1), 0.2)
 
         shake(20 * math.min(velToAdd:getLen() / 2000, 1), 1, 0.2, velToAdd:getRot())
 
@@ -167,7 +167,7 @@ function processPlayer(this)
         bulletVel:normalize()
         bulletVel:rotate(love.math.random(this.stats.spread * - 0.5, this.stats.spread * 0.5))
 
-        bullet.vel = newVec(bulletVel.x * 800, bulletVel.y * 800)
+        bullet.vel = newVec(bulletVel.x * 600, bulletVel.y * 600)
 
         table.remove(this.bullets, #this.bullets)
 

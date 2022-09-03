@@ -9,6 +9,7 @@ SHADERS = {
 }
 
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
+SHADERS.POST_PROCESS:send("xRatio", WS[2] / WS[1])
 
 ---------- SPECIFIC SHADER FUNCTIONS
 
@@ -106,13 +107,15 @@ function processShockwaves()
 
         local idC = id - 1
 
+        print(shockwave.position[1] / WS[1], shockwave.position[2] / WS[2])
+
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].lifetime", shockwave.lifetime)
 
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].lifetimeMax", shockwave.lifetimeMax)
 
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].force", shockwave.force)
 
-        SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].position", {shockwave.position[1] - camera[1], shockwave.position[2] - camera[2]})
+        SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].position", {shockwave.position[1], shockwave.position[2]})
         
         SHADERS.POST_PROCESS:send("shockwaves[" .. tostring(idC) .. "].size", shockwave.size)
 
@@ -124,13 +127,13 @@ function processShockwaves()
 
     end SHOCKWAVES = wipeKill(kill, SHOCKWAVES)
 
-    SHADERS.POST_PROCESS:send("ACTIVE_SHOCKWAVES", clamp(#SHOCKWAVES, 0, 15))
+    SHADERS.POST_PROCESS:send("ACTIVE_SHOCKWAVES", #SHOCKWAVES)
 
 end
 
 function shock(x, y, size, force, lifetime)
 
-    if #SHOCKWAVES < 16 then table.insert(SHOCKWAVES, {position = {x, y}, size = size, lifetime = lifetime, force = force, lifetimeMax = lifetime}) end
+    if #SHOCKWAVES < 16 then table.insert(SHOCKWAVES, {position = {x - camera[1], y - camera[2]}, size = size, lifetime = lifetime, force = force, lifetimeMax = lifetime}) end
 
 end
 
