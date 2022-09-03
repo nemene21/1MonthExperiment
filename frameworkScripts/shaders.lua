@@ -124,7 +124,7 @@ function processShockwaves()
 
     end SHOCKWAVES = wipeKill(kill, SHOCKWAVES)
 
-    SHADERS.POST_PROCESS:send("ACTIVE_SHOCKWAVES", clamp(#SHOCKWAVES, 0, 16))
+    SHADERS.POST_PROCESS:send("ACTIVE_SHOCKWAVES", clamp(#SHOCKWAVES, 0, 15))
 
 end
 

@@ -56,9 +56,6 @@ end
 
 function processPlayer(this)
 
-    -- Gravity
-    this.vel.y = math.min(this.vel.y + dt * GRAVITY * boolToInt(not this.isFloating), MAX_FALL_SPEED)
-
     -- Air friction
     this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
 
@@ -67,7 +64,7 @@ function processPlayer(this)
     this.knockback.x = lerp(this.knockback.x, 0, dt * 2)
     this.knockback.y = lerp(this.knockback.y, 0, dt * 2)
 
-    local rot = 360 / player.stats.maxBullets
+    local rot = 360 / this.stats.maxBullets
     for id, bullet in ipairs(this.bullets) do -- Put bullets in their place
 
         local pos = newVec(40, 0)
@@ -81,19 +78,28 @@ function processPlayer(this)
     this.velocityParticles.x = this.pos.x -- Set particle position
     this.velocityParticles.y = this.pos.y
 
-    if player.pos.touching.x ~= 0 then -- Hitting on x
+    -- Gravity
+    this.vel.y = math.min(this.vel.y + dt * GRAVITY * boolToInt(not this.isFloating), MAX_FALL_SPEED)
+
+    if this.pos.touching.x ~= 0 then -- Hitting on x
 
         this.pos.x = this.pos.x - this.vel.x * dt -- Apply opposite velocity
 
-        player.vel.x = player.vel.x * - 0.8
+        this.vel.x = this.vel.x * - 0.8
 
     end
 
-    if player.pos.touching.y ~= 0 then -- Hitting on y
+    if this.pos.touching.y ~= 0 then -- Hitting on y
 
         this.pos.y = this.pos.y - this.vel.y * dt -- Apply opposite velocity
 
-        player.vel.y = player.vel.y * - 0.8
+        this.vel.y = this.vel.y * - 0.75
+
+        if math.abs(this.vel.y) < 100 then
+
+            this.vel.y = 0
+
+        end
 
     end
 

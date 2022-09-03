@@ -38,10 +38,10 @@ function intro()
     local fadeAnimation = introAnimation * 0.5
 
     setColor(255, 255, 255, 255 * fadeAnimation)
-    love.graphics.draw(LOGO, 400, 300 - 400 * (1 - animation), 0, 2 - animation + squash, animation - squash, LOGO:getWidth() * 0.5, LOGO:getHeight() * 0.5)
+    love.graphics.draw(LOGO, WS[1] * 0.5, WS[2] * 0.5 - WS[1] * 0.5 * (1 - animation), 0, 2 - animation + squash, animation - squash, LOGO:getWidth() * 0.5, LOGO:getHeight() * 0.5)
 
     setColor(255, 255, 255, 255 * fadeAnimation)
-    love.graphics.draw(LOGO_LETTERS, 400, 450, 0, 1, 1, LOGO_LETTERS:getWidth() * 0.5, LOGO_LETTERS:getHeight() * 0.5)
+    love.graphics.draw(LOGO_LETTERS, WS[1] * 0.5, 450, 0, 1, 1, LOGO_LETTERS:getWidth() * 0.5, LOGO_LETTERS:getHeight() * 0.5)
 
     if introAnimation > 0.5 and not introShaken then
 

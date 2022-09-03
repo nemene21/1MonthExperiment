@@ -1,7 +1,7 @@
 {
-"spawning" : true, "amount" : {"a" : 1, "b" : 2},
+"spawning" : true, "amount" : {"a" : 1, "b" : 1},
 
-"timer" : 0, "ticks" : -1, "tickSpeed" : {"a" : 0.01, "b" : 0.02},
+"timer" : 0, "ticks" : -1, "tickSpeed" : {"a" : 0.03, "b" : 0.07},
 
 "rotation" : -90,"spread" : 10,
 

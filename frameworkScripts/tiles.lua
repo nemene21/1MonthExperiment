@@ -12,8 +12,14 @@ function drawTilemap(tilemap)
     for id,T in pairs(tilemap.tiles) do
         local pos = splitString(id,",")
         local tileX = tonumber(pos[1]); local tileY = tonumber(pos[2])
+
+        local pos = newVec(tileX*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.x, tileY*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.y)
+
+        if pos.x >= -24 and pos.x <= 824 and pos.y >= -24 and pos.y <= 624 then
         
-        drawFrame(tilemap.sheet,T[1],T[2],tileX*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.x,tileY*tilemap.tileSize - tilemap.tileSize * 0.5 - tilemap.offset.y)
+            drawFrame(tilemap.sheet,T[1],T[2],pos.x, pos.y)
+
+        end
     end
 
 end
