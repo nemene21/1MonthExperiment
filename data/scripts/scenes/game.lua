@@ -29,12 +29,12 @@ function game()
     love.graphics.setCanvas(BACKGROUND)
     clear(255, 157, 129)
 
-    for id, room in ipairs(rooms) do room:drawBg() end
+    for id, room in ipairs(rooms) do room:drawBg() end -- Draw room background
 
     love.graphics.setCanvas(FOREGROUND)
     clear(0, 0, 0, 0)
 
-    for id, bullet in ipairs(playerBullets) do
+    for id, bullet in ipairs(playerBullets) do -- Process player bullets
 
         bullet.x = bullet.x + bullet.vel.x * dt
         bullet.y = bullet.y + bullet.vel.y * dt
@@ -44,19 +44,24 @@ function game()
     end
 
     player:process()
+
+    local kill = {}
+    for id, enemy in ipairs(rooms[roomAt].enemies) do
+
+        enemy:process()
+        enemy:draw()
+
+    end rooms[roomAt].enemies = wipeKill(kill, rooms[roomAt].enemies)
+
     player:draw()
 
-    roomAt = math.floor(- player.pos.y / WS[2] + 2)
+    roomAt = math.floor(- player.pos.y / WS[2] + 2) -- Set room at and bind the camera
     ROOM_IN = rooms[roomAt]
     bindCamera(WS[1] * 0.5, - ((roomAt - 2) * WS[2] + WS[2] * 0.5), 1)
 
-    for id, room in ipairs(rooms) do room:drawFg() end
+    for id, room in ipairs(rooms) do room:drawFg() end -- Draw room foreground
 
-    drawColliders(ROOM_IN.tilemap.colliders)
-    drawCollider(player.pos)
-    setColor(255, 255, 255)
-
-    love.graphics.setCanvas(display)
+    love.graphics.setCanvas(display) -- Draw bg and fg on the display
 
     love.graphics.draw(BACKGROUND)
 

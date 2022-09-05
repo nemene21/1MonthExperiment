@@ -10,7 +10,7 @@ function generate()
 
     for i=1, lastRoom do
 
-        local layout = nil
+        local layout = nil -- Layout
 
         if i == 1 then
 
@@ -26,9 +26,15 @@ function generate()
 
         end end
 
-        local room   = newRoom((i - 1) * WS[2], layout)
+        local yOffset = (i - 1) * WS[2]
 
-        rooms[i] = room
+        local room   = newRoom(yOffset, layout) -- Room built
+
+        room.enemies = {newEnemy("slime", 400, 300 - yOffset)}
+
+        
+
+        rooms[i] = room -- Append room
 
     end
 

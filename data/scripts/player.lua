@@ -163,11 +163,15 @@ function processPlayer(this)
 
         local bullet = this.bullets[#this.bullets]
 
-        local bulletVel = newVec(xM - bullet.x, yM - bullet.y)
+        local bulletVel = newVec(xM - bullet.x + camera[1], yM - bullet.y + camera[2])
         bulletVel:normalize()
         bulletVel:rotate(love.math.random(this.stats.spread * - 0.5, this.stats.spread * 0.5))
 
         bullet.vel = newVec(bulletVel.x * 600, bulletVel.y * 600)
+
+        bullet.interpolation = "linear"
+        bullet.tickSpeed.a = 0.01
+        bullet.tickSpeed.b = 0.02
 
         table.remove(this.bullets, #this.bullets)
 
@@ -177,6 +181,7 @@ function processPlayer(this)
         this.vel.y = this.vel.y - bulletVel.y * 200
 
         shake(3, 1, 0.15, bulletVel:getRot() + 180)
+        shock(bullet.x, bullet.y, 0.05, 0.05, 0.2)
 
     end
 
