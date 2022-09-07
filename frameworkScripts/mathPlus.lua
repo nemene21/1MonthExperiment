@@ -80,9 +80,15 @@ function moveRect(rect,motion,collidesWith)
     return rect
 end
 
+function rectCollidingCircle(rect,cX,cY,rad)
+    local x = clamp(cX, rect.x - rect.w * 0.5, rect.x + rect.w * 0.5)
+    local y = clamp(cY, rect.y - rect.h * 0.5, rect.y + rect.h * 0.5)
+    return newVec(x - cX, y - cY):getLen() < rad
+end
+
 -- Draw cool debug rects
 function drawCollider(collider)
-    setColor(0,0,255,50)
+    setColor(255,0,0,150)
     love.graphics.rectangle("fill",collider.x - camera[1] - collider.w * 0.5, collider.y - camera[2] - collider.h * 0.5 ,collider.w,collider.h)
     setColor(0,0,255,255)
 end

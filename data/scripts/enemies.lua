@@ -1,6 +1,7 @@
 
 require "data.scripts.enemies.slime"
 
+ENEMIES_TO_GENERATE = {"slime"}
 ENEMIES = {
 
     slime = newSlime
@@ -18,6 +19,9 @@ function newEnemy(name, x, y)
 
     enemy.process = processEnemy
     enemy.draw    = drawEnemy
+    enemy.hit     = hurtEnemy
+
+    enemy.canGetContactDamage = true
 
     return enemy
 
@@ -32,16 +36,68 @@ function processEnemy(this)
 
     this:additionalProcess()
 
+    if this.pos.y > - rooms[roomAt].y + WS[2] - 24 then
+
+        this.pos.touching.y = - 1
+
+        this.vel.y = this.vel.y * - 0.8
+
+        this.pos.y = - rooms[roomAt].y + WS[2] - 24
+
+    end
+
+    if this.pos.y < - rooms[roomAt].y + 24 then
+
+        this.pos.touching.y = 1
+
+        this.vel.y = this.vel.y * - 0.8
+
+        this.pos.y = - rooms[roomAt].y + 24
+
+    end
+
+    if this.pos.touching.x ~= 0 then
+
+        this.knockback.x = this.knockback.x * - 0.8
+
+    end
+
+    if this.pos.touching.y ~= 0 then
+
+        this.knockback.y = this.knockback.y * - 0.8
+
+    end
+
     this.pos = moveRect(this.pos, newVec(this.knockback.x + this.vel.x, this.knockback.y + this.vel.y), rooms[roomAt].tilemap.colliders)
+
+    local hitStrength = newVec(this.knockback.x - player.vel.x, this.knockback.y - player.vel.y):getLen()
+
+    if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, 24) and hitStrength > 400 then
+        
+        if this.canGetContactDamage then
+
+            damage = hitStrength / 800 * 20
+
+            print(damage)
+
+            this:hit(damage, player.vel)
+
+        end
+
+        this.canGetContactDamage = false
+    else
+
+        this.canGetContactDamage = true
+        
+    end
 
 end
 
 function drawEnemy(this)
 
-    flash(this.flash)
+    flash(boolToInt(this.flash * 5 > 0))
     this:additionalDraw()
     resetShader()
-
 end
 
 function hurtEnemy(this, damage, knockback)

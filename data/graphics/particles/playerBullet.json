@@ -14,6 +14,8 @@
     "data" : null
 },
 
+"follow" : true,
+
 "particleData" : {
     "speed" : {"a" : 0, "b" : 80},
     "rotation" : {"a" : 0, "b" : 1},

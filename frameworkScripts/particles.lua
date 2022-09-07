@@ -121,6 +121,7 @@ SPAWNS = {
 
 function newParticleSystem(x,y,data)
     data.x = x; data.y = y; data.particles = {}; data.process = processParticleSystem
+    data.lastPos = newVec(0, 0)
     return data
 end
 
@@ -177,6 +178,9 @@ function processParticleSystem(particleSystem)
         -- Add velocity to position
         P.x = P.x + P.vel.x * dt; P.y = P.y + P.vel.y * dt
 
+        P.x = P.x + (particleSystem.x - particleSystem.lastPos.x) * boolToInt(particleSystem.follow)
+        P.y = P.y + (particleSystem.y - particleSystem.lastPos.y) * boolToInt(particleSystem.follow)
+
         -- Rotate vector by rotation and add force
         P.vel:rotate(P.rotation * dt)
         P.vel.x = P.vel.x + particleSystem.force.x * dt
@@ -200,4 +204,7 @@ function processParticleSystem(particleSystem)
         table.remove(particleSystem.particles,P-killed)
         killed = killed + 1
     end
+
+    particleSystem.lastPos.x = particleSystem.x
+    particleSystem.lastPos.y = particleSystem.y
 end

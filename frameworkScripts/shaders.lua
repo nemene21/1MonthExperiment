@@ -5,7 +5,8 @@ SHADERS = {
     FLASH = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/FLASH.fs"))),
     EMPTY = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/EMPTY.fs"))),
     PLAYER = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/PLAYER.fs"))),
-    SHADOW = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/SHADOW.fs")))
+    SHADOW = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/SHADOW.fs"))),
+    ROOM_BLOCKAGE = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/ROOM_BLOCKAGE.fs")))
 }
 
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
@@ -26,6 +27,8 @@ function newNoiseTexture(w, h, zoom, seed)
     local seed = seed or love.math.random(0, 1000000)
 
     local noiseTexture = love.graphics.newCanvas(w, h)
+
+    noiseTexture:setWrap("repeat")
 
     love.graphics.setCanvas(noiseTexture)
 
@@ -136,3 +139,6 @@ function shock(x, y, size, force, lifetime)
 end
 
 postPro = "POST_PROCESS"
+
+SHADERS.ROOM_BLOCKAGE:send("noise", newNoiseTexture(WS[1], 64, 0.04))
+SHADERS.ROOM_BLOCKAGE:send("xSnap", 0.039 / WS[2] / WS[1])

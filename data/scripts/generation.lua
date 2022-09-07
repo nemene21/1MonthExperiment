@@ -30,9 +30,15 @@ function generate()
 
         local room   = newRoom(yOffset, layout) -- Room built
 
-        room.enemies = {newEnemy("slime", 400, 300 - yOffset)}
+        if i ~= 1 and i ~= lastRoom then
+            
+            room.enemies = generateRoomEnemies(room)
 
-        
+        else
+
+            room.enemies = {}
+
+        end
 
         rooms[i] = room -- Append room
 
@@ -40,4 +46,29 @@ function generate()
 
     return rooms
 
+end
+
+function generateRoomEnemies(room)
+    enemies = {}
+
+    for i = 1, love.math.random(2, 3) do
+
+        local enemy = newEnemy(ENEMIES_TO_GENERATE[love.math.random(1, #ENEMIES_TO_GENERATE)], 0, 0)
+
+        local positionCorrect = false
+
+        while not positionCorrect do
+
+            enemy.pos.x = love.math.random(48, WS[1] - 48)
+            enemy.pos.y = love.math.random(48, WS[2] - 48) - room.y
+
+            positionCorrect = #checkCollisions(enemy.pos, room.tilemap.colliders) == 0
+
+        end
+
+        table.insert(enemies, enemy)
+
+    end
+
+    return enemies
 end

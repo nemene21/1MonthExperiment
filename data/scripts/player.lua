@@ -29,12 +29,17 @@ function newPlayer(x, y)
         bullets    = {},
         shootTimer = 0,
 
+        bulletOffsetRot = 0,
+        bulletOffset = newVec(x, y),
+
         stats = {
 
             flingStrenght = 4,
             maxBullets = 8,
             spread = 5,
-            knockbackResistance = 0.5
+            knockbackResistance = 0.5,
+            shootDamage = 20,
+            shootKnockback = 200
 
         }
         
@@ -64,14 +69,19 @@ function processPlayer(this)
     this.knockback.x = lerp(this.knockback.x, 0, dt * 2)
     this.knockback.y = lerp(this.knockback.y, 0, dt * 2)
 
+    this.bulletOffsetRot = this.bulletOffsetRot + dt * 90
+
+    this.bulletOffset.x = lerp(this.bulletOffset.x, this.pos.x, dt * 8)
+    this.bulletOffset.y = lerp(this.bulletOffset.y, this.pos.y, dt * 8)
+
     local rot = 360 / this.stats.maxBullets
     for id, bullet in ipairs(this.bullets) do -- Put bullets in their place
 
         local pos = newVec(40, 0)
-        pos:rotate(rot * id)
+        pos:rotate(rot * id + this.bulletOffsetRot)
 
-        bullet.x = pos.x + this.pos.x
-        bullet.y = pos.y + this.pos.y
+        bullet.x = pos.x + this.bulletOffset.x
+        bullet.y = pos.y + this.bulletOffset.y
 
     end
 
@@ -173,12 +183,14 @@ function processPlayer(this)
         bullet.tickSpeed.a = 0.01
         bullet.tickSpeed.b = 0.02
 
+        bullet.follow = false
+
         table.remove(this.bullets, #this.bullets)
 
         table.insert(playerBullets, bullet)
 
-        this.vel.x = this.vel.x - bulletVel.x * 200
-        this.vel.y = this.vel.y - bulletVel.y * 200
+        this.vel.x = this.vel.x - bulletVel.x * 100
+        this.vel.y = this.vel.y - bulletVel.y * 100
 
         shake(3, 1, 0.15, bulletVel:getRot() + 180)
         shock(bullet.x, bullet.y, 0.05, 0.05, 0.2)
