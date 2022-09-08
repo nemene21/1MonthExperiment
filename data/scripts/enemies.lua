@@ -78,8 +78,6 @@ function processEnemy(this)
 
             damage = hitStrength / 800 * 20
 
-            print(damage)
-
             this:hit(damage, player.vel)
 
         end

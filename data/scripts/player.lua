@@ -12,6 +12,8 @@ function newPlayer(x, y)
         pos = newRect(x, y, 40, 40),
         vel = newVec(0, 0),
 
+        hp = 5,
+
         velocityParticles = newParticleSystem(x, y, loadJson("data/graphics/particles/playerTrail.json")),
 
         knockback = newVec(0, 0),
@@ -39,6 +41,7 @@ function newPlayer(x, y)
             spread = 5,
             knockbackResistance = 0.5,
             shootDamage = 20,
+            reloadTime = 0.2,
             shootKnockback = 200
 
         }
@@ -166,14 +169,16 @@ function processPlayer(this)
 
     end
 
-    this.shootTimer = this.shootTimer - dt
-    if this.shootTimer < 0 and mousePressed(2) and #this.bullets ~= 0 then -- Shoot
+    this.shootTimer = math.max(this.shootTimer - dt, 0)
+    if this.shootTimer == 0 and mousePressed(2) and #this.bullets ~= 0 then -- Shoot
 
-        this.shootTimer = 0.2
+        this.hp = this.hp - 1
+
+        this.shootTimer = this.stats.reloadTime
 
         local bullet = this.bullets[#this.bullets]
 
-        local bulletVel = newVec(xM - bullet.x + camera[1], yM - bullet.y + camera[2])
+        local bulletVel = newVec(xM - this.pos.x + camera[1], yM - this.pos.y + camera[2])
         bulletVel:normalize()
         bulletVel:rotate(love.math.random(this.stats.spread * - 0.5, this.stats.spread * 0.5))
 
@@ -185,6 +190,9 @@ function processPlayer(this)
 
         bullet.follow = false
 
+        bullet.x = this.pos.x
+        bullet.y = this.pos.y
+
         table.remove(this.bullets, #this.bullets)
 
         table.insert(playerBullets, bullet)
@@ -193,7 +201,7 @@ function processPlayer(this)
         this.vel.y = this.vel.y - bulletVel.y * 100
 
         shake(3, 1, 0.15, bulletVel:getRot() + 180)
-        shock(bullet.x, bullet.y, 0.05, 0.05, 0.2)
+        shock(bullet.x, bullet.y, 0.05, 0.025, 0.2)
 
     end
 
@@ -213,25 +221,31 @@ function drawPlayer(this)
 
     end
 
-    love.graphics.setShader(SHADERS.PLAYER); SHADERS.PLAYER:send("intensity", 1 - this.floatTimer / 3)
-
     local particleStrength = this.vel:getLen() / 1000
     this.velocityParticles.rotation = this.vel:getRot()
     this.velocityParticles.particleData.width.a = particleStrength * 12
     this.velocityParticles.particleData.width.b = particleStrength * 24
 
     this.velocityParticles:process()
+
+    love.graphics.setShader(SHADERS.PLAYER)
+
+    SHADERS.PLAYER:send("intensity", 1 - this.floatTimer / 3)
+    SHADERS.PLAYER:send("hp", this.hp)
+
     setColor(255, 255, 255)
 
     local stretch = this.vel:getLen() / 3000
 
     local floatAnimation = this.floatingAnimation * math.abs(math.sin(globalTimer * 10) * 0.2)
 
+    local shootAnimation = this.shootTimer / this.stats.reloadTime * 0.33
+
     local angle = this.vel:getRot() / 180 * 3.14
 
     love.graphics.translate(this.pos.x - camera[1], this.pos.y - camera[2])
     love.graphics.rotate(angle)
-    love.graphics.scale(1 + stretch, 1 - stretch)
+    love.graphics.scale(1 + stretch + shootAnimation, 1 - stretch - shootAnimation)
     love.graphics.rotate(-angle)
 
     love.graphics.draw(PLAYER_IMAGE, 0, 0, 0, (1 + floatAnimation) * 3, (1 + floatAnimation) * 3, PLAYER_IMAGE:getWidth() * 0.5, PLAYER_IMAGE:getHeight() * 0.5)
