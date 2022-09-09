@@ -8,7 +8,10 @@ function newRoom(y, layout)
         y = y,
 
         drawBg = drawRoomBg,
-        drawFg = drawRoomFg
+        drawFg = drawRoomFg,
+        
+        enemies     = {},
+        enemySpawns = {}
 
     }
 
@@ -40,6 +43,25 @@ function drawRoomBg(this)
 end
 
 function drawRoomFg(this)
+
+    local kill = {}
+    for id, enemySpawn in ipairs(this.enemySpawns) do
+
+        enemySpawn:process()
+
+        enemySpawn.timer = enemySpawn.timer - dt
+
+        if enemySpawn.timer < 0 then
+
+            enemySpawn.ticks = 0
+
+            table.insert(this.enemies, enemySpawn.enemy)
+            table.insert(kill, id)
+            table.insert(particleSystems, enemySpawn)
+
+        end
+
+    end this.enemySpawns = wipeKill(kill, this.enemySpawns)
 
     this.tilemap:draw()
 

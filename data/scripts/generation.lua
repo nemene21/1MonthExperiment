@@ -32,11 +32,7 @@ function generate()
 
         if i ~= 1 and i ~= lastRoom then
             
-            room.enemies = generateRoomEnemies(room)
-
-        else
-
-            room.enemies = {}
+            room.enemySpawns = generateRoomEnemies(room)
 
         end
 
@@ -48,8 +44,10 @@ function generate()
 
 end
 
+ENEMY_SPAWN_PARTICLES = loadJson("data/graphics/particles/enemySpawn.json")
+
 function generateRoomEnemies(room)
-    enemies = {}
+    enemySpawns = {}
 
     for i = 1, love.math.random(2, 3) do
 
@@ -66,9 +64,14 @@ function generateRoomEnemies(room)
 
         end
 
-        table.insert(enemies, enemy)
+        local spawner = newParticleSystem(enemy.pos.x, enemy.pos.y, deepcopyTable(ENEMY_SPAWN_PARTICLES))
+
+        spawner.timer = 2.5
+        spawner.enemy = enemy
+
+        table.insert(enemySpawns, spawner)
 
     end
 
-    return enemies
+    return enemySpawns
 end
