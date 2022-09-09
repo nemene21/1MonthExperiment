@@ -13,6 +13,7 @@ function newPlayer(x, y)
         vel = newVec(0, 0),
 
         hp = 5,
+        iFrames = 0,
 
         velocityParticles = newParticleSystem(x, y, loadJson("data/graphics/particles/playerTrail.json")),
 
@@ -20,6 +21,7 @@ function newPlayer(x, y)
 
         process = processPlayer,
         draw    = drawPlayer,
+        hit     = hitPlayer,
 
         holdPos = nil,
         holding = false,
@@ -42,7 +44,8 @@ function newPlayer(x, y)
             knockbackResistance = 0.5,
             shootDamage = 20,
             reloadTime = 0.2,
-            shootKnockback = 200
+            shootKnockback = 200,
+            iFrames = 0.5
 
         }
         
@@ -63,6 +66,8 @@ function newPlayer(x, y)
 end
 
 function processPlayer(this)
+
+    this.iFrames = clamp(this.iFrames - dt, 0, this.stats.iFrames)
 
     -- Air friction
     this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
@@ -172,8 +177,6 @@ function processPlayer(this)
     this.shootTimer = math.max(this.shootTimer - dt, 0)
     if this.shootTimer == 0 and mousePressed(2) and #this.bullets ~= 0 then -- Shoot
 
-        this.hp = this.hp - 1
-
         this.shootTimer = this.stats.reloadTime
 
         local bullet = this.bullets[#this.bullets]
@@ -233,7 +236,7 @@ function drawPlayer(this)
     SHADERS.PLAYER:send("intensity", 1 - this.floatTimer / 3)
     SHADERS.PLAYER:send("hp", this.hp)
 
-    setColor(255, 255, 255)
+    setColor(255, 255, 255, 255 * (1 - math.abs(math.sin(player.iFrames / player.stats.iFrames * 3.14 * 5))))
 
     local stretch = this.vel:getLen() / 3000
 
@@ -253,5 +256,18 @@ function drawPlayer(this)
     love.graphics.origin()
 
     love.graphics.setShader()
+
+    setColor(255, 255, 255)
+
+end
+
+function hitPlayer(this, dmg)
+
+    if this.iFrames == 0 then
+
+        this.hp = this.hp - dmg
+        this.iFrames = this.stats.iFrames
+
+    end
 
 end

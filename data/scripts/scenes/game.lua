@@ -175,7 +175,7 @@ function game()
         blockageAnim = clamp(blockageAnim + dt * 4, 0, 1)
 
         if player.pos.y < - rooms[roomAt].y then
-
+ 
             player.pos.y = player.pos.y - player.vel.y * dt
 
             player.vel.y = player.vel.y * - 0.8
@@ -208,6 +208,8 @@ function game()
         love.graphics.setShader()
 
     end
+
+    drawEveryIndicator()
 
     -- Return scene
     return sceneAt

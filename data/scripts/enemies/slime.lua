@@ -13,6 +13,8 @@ function newSlime(x, y)
         additionalProcess = processSlime,
         additionalDraw    = drawSlime,
 
+        attackAnimation = 0,
+
         scale = newVec(1, 1),
 
         hp = 50,
@@ -43,6 +45,8 @@ end
 
 function slimeIdle(this)
 
+    this.attackAnimation = lerp(this.attackAnimation, 0, dt * 12)
+
     if this.pos.touching.y == 1 then
 
         this.vel.y = 0
@@ -53,6 +57,12 @@ function slimeIdle(this)
 
     this.scale.x = lerp(this.scale.x, 1 + math.sin(globalTimer * 4) * 0.1, dt * 3)
     this.scale.y = lerp(this.scale.y, 1 + math.sin(globalTimer * 4 + 1.57) * 0.1, dt * 3)
+
+    if this.switchStateTimer < 1.5 then
+
+        drawIndicator(this.pos.x, this.pos.y - 24, this.switchStateTimer)
+
+    end
 
     this.switchStateTimer = this.switchStateTimer - dt
     if this.switchStateTimer < 0 then
@@ -73,6 +83,8 @@ function slimeIdle(this)
 end
 
 function slimeJump(this)
+
+    this.attackAnimation = lerp(this.attackAnimation, 1, dt * 12)
 
     this.scale.x = lerp(this.scale.x, 1, dt * 1)
     this.scale.y = lerp(this.scale.y, 1, dt * 1)
@@ -106,6 +118,14 @@ function slimeJump(this)
         this.vel.y = - 100
 
         table.insert(particleSystems, newParticleSystem(this.pos.x, this.pos.y + 10, deepcopyTable(SLIME_LAND_PARTICLES)))
+    
+    else
+
+        if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, player.pos.w) then
+            
+            player:hit(1)
+
+        end
 
     end
 
@@ -113,7 +133,10 @@ end
 
 function drawSlime(this)
 
+    setColor(255, 255 * (1 - this.attackAnimation), 255 * (1 - this.attackAnimation))
     drawSprite(this.image, this.pos.x, this.pos.y, this.scale.x, this.scale.y)
+
+    shine(this.pos.x, this.pos.y, 96, {255 * this.attackAnimation, 255 * (1 - this.attackAnimation), 0, 100})
     setColor(255, 255, 255)
 
 end

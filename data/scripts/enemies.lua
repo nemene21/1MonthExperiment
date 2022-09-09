@@ -72,7 +72,7 @@ function processEnemy(this)
 
     local hitStrength = newVec(this.knockback.x - player.vel.x, this.knockback.y - player.vel.y):getLen()
 
-    if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, 24) and hitStrength > 400 then
+    if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, player.pos.w + 4) and hitStrength > 400 then
         
         if this.canGetContactDamage then
 
@@ -105,5 +105,39 @@ function hurtEnemy(this, damage, knockback)
     this.knockback.y = this.knockback.y + knockback.y
 
     this.flash = 0.2
+
+end
+
+INDICATORS = {}
+INDICATOR = love.graphics.newImage("data/graphics/images/exclamationMark.png")
+
+function drawIndicator(x, y, time)
+
+    table.insert(INDICATORS, {
+
+        x = x, y = y, time = time
+
+    })
+
+end
+
+function drawEveryIndicator()
+
+    for id, indicator in ipairs(INDICATORS) do
+
+        if math.sin(globalTimer * 12) > 0 then
+            
+            setColor(255, 0, 77)
+
+        else
+
+            setColor(255, 163, 0)
+
+        end
+        drawSprite(INDICATOR, indicator.x, indicator.y + 8 * math.sin(globalTimer * 3), 1, 1)
+
+    end
+
+    INDICATORS = {}
 
 end
