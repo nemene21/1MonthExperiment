@@ -1,0 +1,31 @@
+{
+"spawning" : true, "amount" : {"a" : 2, "b" : 3},
+
+"timer" : 0, "ticks" : -1, "tickSpeed" : {"a" : 0.01, "b" : 0.02},
+
+"rotation" : 0,"spread" : 360,
+
+"interpolation" : "linear",
+
+"force" : {"x" : 0,"y" : 100},
+
+"spawnShape" : {
+    "mode" : "circle",
+    "data" : 8
+},
+
+"particleData" : {
+    "speed" : {"a" : 20, "b" : 120},
+    "rotation" : {"a" : 300, "b" : 300},
+    "color" : {
+        "r" : {"a" : 0.99, "b" : 1},
+        "g" : {"a" : 0.99, "b" : 1},
+        "b" : {"a" : 0.99, "b" : 1},
+        "a" : {"a" : 0.99, "b" : 1}
+    },
+    "width" : {"a" : 8, "b" : 14},
+    "lifetime" : {"a" : 0.5, "b" : 1},
+    
+    "drawMode" : "circle"
+}
+}
