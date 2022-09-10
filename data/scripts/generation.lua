@@ -36,6 +36,8 @@ function generate()
 
         end
 
+        room.tilemap:buildColliders()
+
         rooms[i] = room -- Append room
 
     end
@@ -66,7 +68,7 @@ function generateRoomEnemies(room)
 
         local spawner = newParticleSystem(enemy.pos.x, enemy.pos.y, deepcopyTable(ENEMY_SPAWN_PARTICLES))
 
-        spawner.timer = 2.5
+        spawner.spawnTimer = 3
         spawner.enemy = enemy
 
         table.insert(enemySpawns, spawner)

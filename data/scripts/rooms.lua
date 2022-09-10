@@ -11,7 +11,9 @@ function newRoom(y, layout)
         drawFg = drawRoomFg,
         
         enemies     = {},
-        enemySpawns = {}
+        enemySpawns = {},
+
+        process = processRoom
 
     }
 
@@ -30,7 +32,7 @@ function newRoom(y, layout)
     end
 
     room.tilemap = newTilemap(ROOM_TILESET, 48, layout, newVec(0, y)) -- Foreground
-    room.tilemap:buildColliders()
+    room.tilemap:buildCollidersBad()
 
     return room
 
@@ -42,16 +44,14 @@ function drawRoomBg(this)
 
 end
 
-function drawRoomFg(this)
+function processRoom(this)
 
     local kill = {}
-    for id, enemySpawn in ipairs(this.enemySpawns) do
+    for id, enemySpawn in ipairs(this.enemySpawns) do -- Process spawns
 
-        enemySpawn:process()
+        enemySpawn.spawnTimer = enemySpawn.spawnTimer - dt
 
-        enemySpawn.timer = enemySpawn.timer - dt
-
-        if enemySpawn.timer < 0 then
+        if enemySpawn.spawnTimer < 0 then
 
             enemySpawn.ticks = 0
 
@@ -62,6 +62,16 @@ function drawRoomFg(this)
         end
 
     end this.enemySpawns = wipeKill(kill, this.enemySpawns)
+
+end
+
+function drawRoomFg(this)
+
+    for id, enemySpawn in ipairs(this.enemySpawns) do -- Draw spawns
+
+        enemySpawn:process()
+
+    end
 
     this.tilemap:draw()
 

@@ -12,6 +12,8 @@ SHADERS = {
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
 SHADERS.POST_PROCESS:send("xRatio", WS[2] / WS[1])
 
+SHADERS.POST_PROCESS:send("hurtVignette",love.graphics.newImage("data/graphics/images/shaderMasks/hitVignette.png"))
+
 ---------- SPECIFIC SHADER FUNCTIONS
 
 lightImage = love.graphics.newCanvas(WS[1],WS[2])                     --                LIGHTS

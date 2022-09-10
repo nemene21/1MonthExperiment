@@ -42,6 +42,18 @@ function buildTilemapColliders(tilemap)
     end
 end
 
+function buildTilemapCollidersBad(tilemap)
+    tilemap.colliders = {}
+
+    for id,T in pairs(tilemap.tiles) do
+        local pos = splitString(id,",")
+        local tileX = tonumber(pos[1]); local tileY = tonumber(pos[2])
+
+        local rect = newRect(tileX * tilemap.tileSize + tilemap.tileSize * 0.5 + tilemap.offset.x, tileY * tilemap.tileSize + tilemap.tileSize * 0.5 - tilemap.offset.y, tilemap.tileSize, tilemap.tileSize)
+        table.insert(tilemap.colliders, rect)
+    end
+end
+
 -- New tilemap
 function newTilemap(texture,tileSize,tiles, offset)
     local tilemap = {
@@ -57,7 +69,8 @@ function newTilemap(texture,tileSize,tiles, offset)
         offset = offset,
 
         colliders={},
-        buildColliders=buildTilemapColliders
+        buildColliders=buildTilemapColliders,
+        buildCollidersBad=buildTilemapCollidersBad
     }
 
     return tilemap

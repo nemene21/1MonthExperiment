@@ -72,7 +72,7 @@ function processEnemy(this)
 
     local hitStrength = newVec(this.knockback.x - player.vel.x, this.knockback.y - player.vel.y):getLen()
 
-    if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, player.pos.w + 4) and hitStrength > 400 then
+    if rectCollidingCircle(this.pos, player.pos.x, player.pos.y, player.pos.w) and hitStrength > 400 then
         
         if this.canGetContactDamage then
 

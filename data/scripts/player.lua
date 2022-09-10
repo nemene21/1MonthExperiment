@@ -69,6 +69,8 @@ function processPlayer(this)
 
     this.iFrames = clamp(this.iFrames - dt, 0, this.stats.iFrames)
 
+    SHADERS.POST_PROCESS:send("hurtVignetteIntensity", this.iFrames / this.stats.iFrames)
+
     -- Air friction
     this.vel.x = lerp(this.vel.x, 0, dt * boolToInt(not this.isFloating))
 
@@ -258,6 +260,8 @@ function drawPlayer(this)
     love.graphics.setShader()
 
     setColor(255, 255, 255)
+
+    shine(player.pos.x, player.pos.y, 140, {0, 100, 255, 110 * (1 - math.abs(math.sin(player.iFrames / player.stats.iFrames * 3.14 * 5)))})
 
 end
 

@@ -38,7 +38,15 @@ function game()
     love.graphics.setCanvas(BACKGROUND)
     clear(255, 157, 129)
 
-    for id, room in ipairs(rooms) do room:drawBg() end -- Draw room background
+    for id, room in ipairs(rooms) do -- Draw room background
+        
+        if math.abs(id - roomAt) < 2 then
+
+            room:drawBg()
+
+        end
+    
+    end
 
     love.graphics.setCanvas(FOREGROUND)
     clear(0, 0, 0, 0)
@@ -54,7 +62,7 @@ function game()
         local enemyHit = false
         for _, enemy in ipairs(ROOM_IN.enemies) do
 
-            if rectCollidingCircle(enemy.pos, bullet.x, bullet.y, 18) and not enemyHit then
+            if rectCollidingCircle(enemy.pos, bullet.x, bullet.y, player.pos.w) and not enemyHit then
 
                 local knockback = newVec(player.stats.shootKnockback, 0)
                 knockback:rotate(bullet.vel:getRot())
@@ -89,6 +97,7 @@ function game()
     bindCamera(WS[1] * 0.5, - ((roomAt - 2) * WS[2] + WS[2] * 0.5), 1)
 
     player:process()
+    ROOM_IN:process()
 
     local kill = {}
     for id, enemy in ipairs(rooms[roomAt].enemies) do -- Process and draw the enemies
@@ -146,7 +155,15 @@ function game()
 
     player:draw()
 
-    for id, room in ipairs(rooms) do room:drawFg() end -- Draw room foreground
+    for id, room in ipairs(rooms) do -- Draw room foreground
+        
+        if math.abs(id - roomAt) < 2 then
+
+            room:drawFg()
+
+        end
+    
+    end
 
     local kill = {}                                            -- Draw particles
     for id,P in ipairs(particleSystems) do
@@ -170,7 +187,7 @@ function game()
 
     love.graphics.draw(FOREGROUND)
 
-    if #rooms[roomAt].enemies ~= 0 then -- Process doors
+    if #rooms[roomAt].enemies ~= 0 or #rooms[roomAt].enemySpawns ~= 0 then -- Process doors
 
         blockageAnim = clamp(blockageAnim + dt * 4, 0, 1)
 

@@ -24,6 +24,10 @@ extern Shockwave shockwaves[16];
 
 vec2 screenDimensions = vec2(768, 576);
 
+extern Image hurtVignette;
+
+uniform float hurtVignetteIntensity = 0.0;
+
 vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 {
 
@@ -54,6 +58,6 @@ vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 
     vec4 px = Texel(image, uvs) * Texel(lightImage, uvs) * Texel(vignetteMask, uvs); // Get pixel
 
-    return px * color;
+    return px * color + vec4(0.5, 0, 0, 1) * hurtVignetteIntensity * Texel(hurtVignette, uvs).r;
 
 }
