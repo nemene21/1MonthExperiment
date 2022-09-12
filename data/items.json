@@ -1,0 +1,11 @@
+[
+{
+    "name" : "Arcane Leap",
+    "description" : "+1 Bullet bounce",
+
+    "image" : "arcaneLeap",
+
+    "stat" : "bulletBounce",
+    "change" : 1
+}
+]

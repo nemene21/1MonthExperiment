@@ -15,6 +15,8 @@ function gameReload()
 
     ROOM_IN = rooms[1]
 
+    mana = {}
+
     particleSystems = {}
     PLAYER_BULLET_HIT_PARTICLES = loadJson("data/graphics/particles/playerBulletHit.json")
 
@@ -62,7 +64,7 @@ function game()
         local enemyHit = false
         for _, enemy in ipairs(ROOM_IN.enemies) do
 
-            if rectCollidingCircle(enemy.pos, bullet.x, bullet.y, player.pos.w) and not enemyHit then
+            if rectCollidingCircle(enemy.pos, bullet.x, bullet.y, 8) and not enemyHit then
 
                 local knockback = newVec(player.stats.shootKnockback, 0)
                 knockback:rotate(bullet.vel:getRot())
@@ -89,6 +91,61 @@ function game()
         end
 
     end playerBullets = wipeKill(kill, playerBullets)
+
+    local kill = {}
+    for id, bullet in ipairs(mana) do -- Processing mana
+
+        bullet:process()
+
+        if bullet.pickingUp then
+
+            local toPlayer = newVec(player.pos.x - bullet.x, player.pos.y - bullet.y) -- Move mana
+            toPlayer:normalize()
+            toPlayer.x = toPlayer.x * 650
+            toPlayer.y = toPlayer.y * 650
+
+            bullet.vel.x = lerp(bullet.vel.x, toPlayer.x, dt * 3.5)
+            bullet.vel.y = lerp(bullet.vel.y, toPlayer.y, dt * 3.5)
+
+            bullet.x = bullet.x + bullet.vel.x * dt
+            bullet.y = bullet.y + bullet.vel.y * dt
+
+            if newVec(bullet.x - player.pos.x, bullet.y - player.pos.y):getLen() < player.pos.w then
+
+                table.insert(kill, id)
+
+                bullet.ticks = 0
+                table.insert(particleSystems, bullet)
+
+                local rot = 360 / player.stats.maxBullets
+
+                local pos = newVec(40, 0)
+                pos:rotate(rot * #player.bullets / player.stats.maxBullets)
+
+                table.insert(player.bullets, newParticleSystem(pos.x + player.pos.x, pos.y + player.pos.y, deepcopyTable(PLAYER_BULLET)))
+
+            end
+
+        else
+
+            if newVec(bullet.x - player.pos.x, bullet.y - player.pos.y):getLen() < player.stats.pickupRange and #player.bullets ~= player.stats.maxBullets then -- Start mana pickup
+
+                bullet.pickingUp = true
+                bullet.vel = newVec(bullet.x - player.pos.x, bullet.y - player.pos.y)
+                bullet.vel:normalize()
+                
+                local speed = 1500
+
+                bullet.vel.x = bullet.vel.x * speed
+                bullet.vel.y = bullet.vel.y * speed
+
+                bullet.vel:rotate(-90, 90)
+
+            end
+
+        end
+
+    end mana = wipeKill(kill, mana)
 
     setColor(255, 255, 255)
 
@@ -126,6 +183,8 @@ function game()
             particles.rotation = enemy.knockback:getRot()
 
             table.insert(particleSystems, particles)
+
+            table.insert(mana, newParticleSystem(enemy.pos.x, enemy.pos.y, deepcopyTable(PLAYER_BULLET)))
 
         end
 
@@ -219,6 +278,8 @@ function game()
 
         love.graphics.setShader(SHADERS.ROOM_BLOCKAGE)
         SHADERS.ROOM_BLOCKAGE:send("time", globalTimer)
+
+        SHADERS.ROOM_BLOCKAGE:send("screen", display)
 
         love.graphics.draw(ROOM_BLOCKAGE_MESH, 0, - 80 + 80 * blockageAnim)
         love.graphics.draw(ROOM_BLOCKAGE_MESH, 0, WS[2] + 80 - 80 * blockageAnim, 0, 1, -1)

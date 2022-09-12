@@ -143,4 +143,5 @@ end
 postPro = "POST_PROCESS"
 
 SHADERS.ROOM_BLOCKAGE:send("noise", newNoiseTexture(WS[1], 64, 0.04))
-SHADERS.ROOM_BLOCKAGE:send("xSnap", 0.039 / WS[2] / WS[1])
+SHADERS.ROOM_BLOCKAGE:send("xSnap", 0.0682 / WS[2] / WS[1])
+SHADERS.ROOM_BLOCKAGE:send("screenRes", WS)

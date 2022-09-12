@@ -42,6 +42,14 @@ function drawRoomBg(this)
 
     this.bgTilemap:draw()
 
+    for id, decoration in ipairs(this.decorations.background) do
+
+        decoration:draw()
+
+        setColor(255, 255, 255)
+
+    end
+
 end
 
 function processRoom(this)
@@ -70,6 +78,14 @@ function drawRoomFg(this)
     for id, enemySpawn in ipairs(this.enemySpawns) do -- Draw spawns
 
         enemySpawn:process()
+
+    end
+
+    for id, decoration in ipairs(this.decorations.foreground) do
+
+        decoration:draw()
+
+        setColor(255, 255, 255)
 
     end
 

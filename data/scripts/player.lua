@@ -45,7 +45,8 @@ function newPlayer(x, y)
             shootDamage = 20,
             reloadTime = 0.2,
             shootKnockback = 200,
-            iFrames = 0.5
+            iFrames = 0.5,
+            pickupRange = 128
 
         }
         
@@ -92,6 +93,8 @@ function processPlayer(this)
 
         bullet.x = pos.x + this.bulletOffset.x
         bullet.y = pos.y + this.bulletOffset.y
+
+        bullet.follow = true
 
     end
 
