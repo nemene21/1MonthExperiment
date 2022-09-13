@@ -1,11 +1,52 @@
 [
 {
     "name" : "Arcane Leap",
-    "description" : "+1 Bullet bounce",
+    "description" : [
+        "+1 Bullet Bounce",
+        "-25% Bullet Damage"
+    ],
 
     "image" : "arcaneLeap",
 
-    "stat" : "bulletBounce",
-    "change" : 1
+    "stats" : {
+
+        "bulletBounce" : 1,
+        "shootDamage" : -5
+
+    }
+},
+{
+    "name" : "Ultimate Focus",
+    "description" : [
+        "-90% Bullet Spread",
+        "+75% Bullet Damage",
+        "-50% Shoot Attack Speed"
+    ],
+
+    "image" : "ultimateFocus",
+
+    "stats" : {
+
+        "spread" : -4.5,
+        "shootDamage" : 15,
+        "reloadTime" : 0.2
+
+    }
+},
+{
+    "name" : "Necklace of Swiftness",
+    "description" : [
+        "+50% Fling Strenght",
+        "-25% Bullet Damage"
+    ],
+
+    "image" : "necklaceOfSwiftness",
+
+    "stats" : {
+
+        "flingStrenght" : 2,
+        "shootDamage" : -5
+
+    }
 }
 ]
