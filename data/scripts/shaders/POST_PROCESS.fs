@@ -28,6 +28,16 @@ extern Image hurtVignette;
 
 uniform float hurtVignetteIntensity = 0.0;
 
+float directions = 6.0;
+float quality = 2.0;
+float radius = 0.006;
+
+float PI2 = 6.2831;
+
+float iterations = directions * quality;
+
+uniform float intensityBloom = 1;
+
 vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 {
 
@@ -56,7 +66,29 @@ vec4 effect( vec4 color, Image image, vec2 uvs, vec2 screen_coords )
 
     }
 
-    vec4 px = Texel(image, uvs) * Texel(lightImage, uvs) * Texel(vignetteMask, uvs); // Get pixel
+    vec4 glow;
+
+    float angle = PI2 / directions;
+    float qualityDiv = 1.0 / quality;
+
+    for (float directionOn = 0.0; directionOn < PI2; directionOn += angle) {
+
+        for (float i = qualityDiv; i < quality; i += qualityDiv) {
+
+            vec4 lookup = Texel(image, uvs + vec2(cos(directionOn) * xRatio, sin(directionOn)) * radius * i);
+
+            glow += lookup * lookup * lookup * lookup * (i / quality) / i;
+
+        }
+
+    }
+
+    vec4 px = Texel(image, uvs);
+
+    glow /= iterations;
+    px += glow * intensityBloom;
+
+    px = px * Texel(lightImage, uvs) * Texel(vignetteMask, uvs); // Get pixel
 
     return px * color + vec4(0.5, 0, 0, 1) * hurtVignetteIntensity * Texel(hurtVignette, uvs).r;
 

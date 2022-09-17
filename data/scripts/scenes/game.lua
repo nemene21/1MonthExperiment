@@ -75,6 +75,8 @@ function game()
                 particles = newParticleSystem(bullet.x, bullet.y, deepcopyTable(PLAYER_BULLET_HIT_PARTICLES))
                 particles.rotation = knockback:getRot() + 90
 
+                table.insert(particleSystems, particles)
+
             end
 
         end
@@ -97,7 +99,7 @@ function game()
 
         bullet:process()
 
-        if bullet.pickingUp then
+        if bullet.pickingUp and #player.bullets ~= player.stats.maxBullets then
 
             local toPlayer = newVec(player.pos.x - bullet.x, player.pos.y - bullet.y) -- Move mana
             toPlayer:normalize()

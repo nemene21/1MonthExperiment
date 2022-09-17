@@ -57,7 +57,7 @@ function intro()
 
     end
 
-    if introDone == 3 then sceneAt = "game" end
+    if introDone == 3 then sceneAt = "menu" end
 
     -- Return scene
     return sceneAt

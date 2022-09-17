@@ -14,9 +14,9 @@ vec4 effect( vec4 color, Image tex, vec2 uvs, vec2 screen_coords )
     float rotation = atan(snappedUvs.y - 0.5, snappedUvs.x - 0.5) + 3.14;
 
     vec4 px = Texel(tex, uvs) * color;
-    px.a -= 0.8 * int(rotation > partRot * hp * 2 + 0.1);
+    px.a -= 0.65 * int(rotation > partRot * hp * 2 + 0.1);
 
-    float grayscale = (px.r + px.g + px.b) / 3;
+    float grayscale = (px.r + px.g + px.b) * 0.33;
 
     return px + (vec4(grayscale,grayscale,grayscale,px.a) - px) * intensity;
 

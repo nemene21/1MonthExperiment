@@ -48,5 +48,19 @@
         "shootDamage" : -5
 
     }
+},
+{
+    "name" : "Magical Potency",
+    "description" : [
+        "+4 Bullet Storage"
+    ],
+
+    "image" : "magicalPotency",
+
+    "stats" : {
+
+        "bulletStorage" : 4
+
+    }
 }
 ]

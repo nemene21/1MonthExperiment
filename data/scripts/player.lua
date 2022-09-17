@@ -46,7 +46,9 @@ function newPlayer(x, y)
             reloadTime = 0.2,
             shootKnockback = 200,
             iFrames = 0.5,
-            pickupRange = 128
+            pickupRange = 128,
+            bulletStorage = 8,
+            bulletBounce = 0
 
         }
         

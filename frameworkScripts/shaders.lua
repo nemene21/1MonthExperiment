@@ -6,7 +6,8 @@ SHADERS = {
     EMPTY = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/EMPTY.fs"))),
     PLAYER = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/PLAYER.fs"))),
     SHADOW = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/SHADOW.fs"))),
-    ROOM_BLOCKAGE = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/ROOM_BLOCKAGE.fs")))
+    ROOM_BLOCKAGE = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/ROOM_BLOCKAGE.fs"))),
+    BUTTON = love.graphics.newShader((love.filesystem.read("data/scripts/shaders/BUTTON.fs")))
 }
 
 SHADERS.POST_PROCESS:send("vignetteMask",love.graphics.newImage("data/graphics/images/shaderMasks/vignette.png"))
@@ -145,3 +146,12 @@ postPro = "POST_PROCESS"
 SHADERS.ROOM_BLOCKAGE:send("noise", newNoiseTexture(WS[1], 64, 0.04))
 SHADERS.ROOM_BLOCKAGE:send("xSnap", 0.0682 / WS[2] / WS[1])
 SHADERS.ROOM_BLOCKAGE:send("screenRes", WS)
+
+buttonBg = love.graphics.newImage("data/graphics/images/shaderMasks/buttonBg.png")
+buttonBg:setWrap("repeat")
+
+buttonBg2 = love.graphics.newImage("data/graphics/images/shaderMasks/buttonBg2.png")
+buttonBg2:setWrap("repeat")
+
+buttonBg3 = love.graphics.newImage("data/graphics/images/shaderMasks/buttonBg3.png")
+buttonBg3:setWrap("repeat")
